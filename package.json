@@ -1,0 +1,22 @@
+{
+  "name": "grunt-lint-inline",
+  "description": "Grunt task for linting inline javascript",
+  "version": "0.0.1",
+  "homepage": "https://github.com/oxyc/grunt-lint-inline",
+  "author": {
+    "name": "Oskar Schöldström",
+    "email": "public@oxy.fi"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/grunt lint"
+  },
+  "dependencies": {
+    "jshint": "*"
+  },
+  "devDependencies": {
+    "grunt": "~0.3"
+  },
+  "keywords": [
+    "gruntplugin lint jshint"
+  ]
+}
