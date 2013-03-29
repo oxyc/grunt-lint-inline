@@ -1,11 +1,13 @@
 # grunt-lint-inline
 
-Grunt task for linting inline javascript.
+Grunt task for linting inline JavaScript.
 
 ## Getting started
 
+This plugin requires Grunt `~0.4.0`
+
 ```
-npm install https://github.com/oxyc/grunt-lint-inline
+npm install grunt-lint-inline --save-dev
 ```
 
 ```javascript
@@ -14,37 +16,22 @@ grunt.loadNpmTasks('grunt-lint-inline');
 
 ## Usage
 
-The task works great as a replacement for the regular lint task, if a target
-filename has an extension and it is not .js or .json it will only lint code
-inside script tags. Otherwise it will default to the regular grunt lint task.
+The task leverages [grunt-contrib-jshint][1] by wrapping around it and removing
+all code not within `<script>`-tags.
 
-Jshint options will be read exactly the same as the lint task.
-
-### Separate task
-
-```javascript
-'lint-inline': {
-  html: ['**/*.html']
-}
-```
-
-### Replace grunt lint
+JSHint options will be read exactly the same as the JSHint task.
 
 ```javascript
 grunt.initConfig({
-  lint: {
-    node: ['grunt.js', 'lib/*.js'],
-    html: ['**/*.html']
+  'inlinelint': {
+    html: ['**/*.html'],
+    php: ['**/*.php']
   }
 });
-grunt.loadNpmTasks('grunt-lint-inline');
-grunt.renameTasks('lint', 'grunt-lint');
-grunt.renameTasks('lint-inline, 'lint');
 ```
 
 ## License
 
-MIT License
-(c) 2012 "Cowboy" Ben Alman
+MIT
 
-...with minor modifications from Oskar Schöldström
+[1]: https://github.com/gruntjs/grunt-contrib-jshint

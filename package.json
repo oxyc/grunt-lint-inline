@@ -1,33 +1,34 @@
 {
   "name": "grunt-lint-inline",
   "description": "Grunt task for linting inline javascript",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "homepage": "https://github.com/oxyc/grunt-lint-inline",
   "bugs": "https://github.com/oxyc/grunt-lint-inline/issues",
   "author": {
     "name": "Oskar Schöldström",
     "email": "public@oxy.fi"
   },
-  "main": "grunt.js",
+  "main": "Gruntfile.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/oxyc/grunt-lint-inline.git"
   },
   "scripts": {
-    "test": "./node_modules/.bin/grunt lint"
+    "test": "./node_modules/.bin/grunt"
   },
   "dependencies": {
-    "jshint": "~0.9.1"
+    "grunt-contrib-jshint": "~0.3.0"
   },
   "devDependencies": {
-    "grunt": "~0.3.17"
+    "grunt": "~0.4.1"
   },
   "engines": {
     "node": ">=0.8.0"
   },
-  "licenses": {
-    "type": "MIT"
-  },
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://oxy.mit-license.org/"
+  }],
   "keywords": [
     "gruntplugin", "lint", "jshint", "grunt"
   ]
