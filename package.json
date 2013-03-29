@@ -1,7 +1,7 @@
 {
   "name": "grunt-lint-inline",
   "description": "Grunt task for linting inline javascript",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/oxyc/grunt-lint-inline",
   "bugs": "https://github.com/oxyc/grunt-lint-inline/issues",
   "author": {
@@ -25,11 +25,16 @@
   "engines": {
     "node": ">=0.8.0"
   },
-  "licenses": [{
-    "type": "MIT",
-    "url": "http://oxy.mit-license.org/"
-  }],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://oxy.mit-license.org/"
+    }
+  ],
   "keywords": [
-    "gruntplugin", "lint", "jshint", "grunt"
+    "gruntplugin",
+    "lint",
+    "jshint",
+    "grunt"
   ]
 }
