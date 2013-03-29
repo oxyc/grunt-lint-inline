@@ -23,7 +23,7 @@ JSHint options will be read exactly the same as the JSHint task.
 
 ```javascript
 grunt.initConfig({
-  'inlinelint': {
+  inlinelint: {
     html: ['**/*.html'],
     php: ['**/*.php']
   }

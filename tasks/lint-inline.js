@@ -48,6 +48,8 @@ module.exports = function (grunt) {
       if (/^\s*$/.test(source)) return; // Skip files without JavaScript.
       jshint.lint(source, options, globals, filepath);
     });
-  });
 
+    if (this.errorCount) { return force; }
+    grunt.log.ok(files.length + ' file' + (files.length === 1 ? '' : 's') + ' lint free.');
+  });
 };
