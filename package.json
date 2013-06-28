@@ -3,10 +3,12 @@
   "description": "Grunt task for linting inline javascript",
   "version": "0.1.1",
   "homepage": "https://github.com/oxyc/grunt-lint-inline",
-  "bugs": "https://github.com/oxyc/grunt-lint-inline/issues",
+  "bugs": {
+    "url": "https://github.com/oxyc/grunt-lint-inline/issues"
+  },
   "author": {
     "name": "Oskar Schöldström",
-    "email": "public@oxy.fi"
+    "url": "http://www.oxy.fi"
   },
   "main": "Gruntfile.js",
   "repository": {
@@ -14,16 +16,18 @@
     "url": "git://github.com/oxyc/grunt-lint-inline.git"
   },
   "scripts": {
-    "test": "./node_modules/.bin/grunt"
+    "test": "grunt test"
   },
   "dependencies": {
-    "grunt-contrib-jshint": "~0.3.0"
+    "grunt-contrib-jshint": "~0.6.0",
+    "temporary": "0.0.5"
   },
   "devDependencies": {
-    "grunt": "~0.4.1"
+    "grunt": "~0.4.1",
+    "grunt-contrib-nodeunit": "~0.2.0"
   },
-  "engines": {
-    "node": ">=0.8.0"
+  "peerDependencies": {
+    "grunt": "~0.4.1"
   },
   "licenses": [
     {
