@@ -1,4 +1,5 @@
-# grunt-lint-inline
+grunt-lint-inline [![Build Status](https://travis-ci.org/oxyc/grunt-lint-inline.png?branch=master)](https://travis-ci.org/oxyc/grunt-lint-inline)
+=================
 
 Grunt task for linting inline JavaScript.
 
