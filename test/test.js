@@ -5,6 +5,16 @@ var grunt = require('grunt')
   , fs = require('fs')
   , fixtures = path.join(__dirname, 'fixtures');
 
+var calculateMatches = function (file, regexFilters) {
+  var count = 0;
+  grunt.file.read(file).split('\n').forEach(function(line, i){
+    regexFilters.forEach(function(filter){
+      if(filter.test(line)) count++;
+    });
+  });
+  return count;
+}
+
 exports.inlinelint = {
   'test-1': function (test) {
     test.expect(4);
@@ -43,5 +53,25 @@ exports.inlinelint = {
       });
       test.done();
     });
+  },
+  'test-4': function (test) {
+    test.expect(2);
+    var files = [path.join(fixtures, 'razor.cshtml')];
+    var regexFilters = [
+      new RegExp(/([\"|\']?)@\w[\w\.\(\)]+/g),
+      new RegExp(/([\"|\']?)@\(([^(\)]*|\(([^(\)]*|\([^\)]*\))*\))*\)/g),
+      new RegExp(/([\"|\']?)@\{[^\}]*?\}/g)
+    ];
+
+    var tempFiles         = lintinline.wrapReporter(jshint, {}, files);
+    var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, regexFilters);
+
+    var matchesInUnfilteredFile = calculateMatches(tempFiles[0], regexFilters);
+    var matchesInFilteredFile   = calculateMatches(filteredTempFiles[0], regexFilters);
+
+    test.ok(matchesInUnfilteredFile > 0, 'Should find matches in unfiltered file');
+    test.equals(0, matchesInFilteredFile, 'Should find no matches in filtered file');
+
+    test.done();
   }
 };
