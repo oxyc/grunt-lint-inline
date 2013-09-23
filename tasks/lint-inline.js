@@ -24,6 +24,10 @@ module.exports = function (grunt) {
     var reporterOutput = options.reporterOutput;
     delete options.reporterOutput;
 
+    // Use regex to filter and replace patterns in code lines
+    var regexpFilters = options.regexpFilters;
+    delete options.regexpFilters;
+
     // Hook into stdout to capture report
     var output = '';
     if (reporterOutput) {
@@ -37,7 +41,7 @@ module.exports = function (grunt) {
 
     // Create temporary files for the inline javascript and wrap the reporter
     // to use the real file paths.
-    var tempFiles = lintinline.wrapReporter(jshint, options, this.filesSrc);
+    var tempFiles = lintinline.wrapReporter(jshint, options, this.filesSrc, regexpFilters);
 
     // Iterate over the temp files instead of this.filesSrc
     jshint.lint(tempFiles, options, function(results, data) {
