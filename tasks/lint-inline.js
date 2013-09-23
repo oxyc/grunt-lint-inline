@@ -41,15 +41,7 @@ module.exports = function (grunt) {
 
     // Iterate over the temp files instead of this.filesSrc
     jshint.lint(tempFiles, options, function(results, data) {
-      var failed = 0;
-      if (results.length > 0) {
-        // Fail task if errors were logged except if force was set.
-        failed = force;
-      } else {
-        if (jshint.usingGruntReporter === true && data.length > 0) {
-          grunt.log.ok(data.length + ' file' + (data.length === 1 ? '' : 's') + ' lint free.');
-        }
-      }
+      var failed = results.length > 0;
 
       // Write the output of the reporter if wanted
       if (reporterOutput) {
@@ -61,6 +53,17 @@ module.exports = function (grunt) {
         }
         grunt.file.write(reporterOutput, output);
         grunt.log.ok('Report "' + reporterOutput + '" created.');
+      }
+
+      // has to be after the eventual reporter output since 'usingGruntReporter' 
+      // is true due to reporter reset in wrapReporter to enable mapping file names
+      if (failed) {
+        // Fail task if errors were logged except if force was set.
+        failed = force;
+      } else {
+        if (jshint.usingGruntReporter === true && data.length > 0) {
+          grunt.log.ok(data.length + ' file' + (data.length === 1 ? '' : 's') + ' lint free.');
+        }
       }
 
       done(failed);
