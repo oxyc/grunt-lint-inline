@@ -20,7 +20,7 @@ function removeHTML(src) {
     if (!s) lines[i] = '';
   });
 
-  return lines.filter(Boolean).join('\n');
+  return lines.join('\n');
 }
 
 function createTemporaryFiles(files) {

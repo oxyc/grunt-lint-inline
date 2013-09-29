@@ -43,5 +43,17 @@ exports.inlinelint = {
       });
       test.done();
     });
+  },
+  'test-4': function (test) {
+    test.expect(1);
+    var files = [path.join(fixtures, 'fail.html')];
+    var expected = 9; // hard coded but what to do?
+    var options = {};
+    var tempFiles = lintinline.wrapReporter(jshint, options, files);
+
+    jshint.lint(tempFiles, options, function (results, data) {
+      test.equal(expected, results[0].error.line, 'Should report line numbers in original file');
+    });
+    test.done();
   }
 };
