@@ -41,7 +41,7 @@ module.exports = function (grunt) {
 
     // Iterate over the temp files instead of this.filesSrc
     jshint.lint(tempFiles, options, function(results, data) {
-      var failed = results.length > 0;
+      var failed = 0;
 
       // Write the output of the reporter if wanted
       if (reporterOutput) {
@@ -57,7 +57,7 @@ module.exports = function (grunt) {
 
       // has to be after the eventual reporter output since 'usingGruntReporter' 
       // is true due to reporter reset in wrapReporter to enable mapping file names
-      if (failed) {
+      if (results.length > 0) {
         // Fail task if errors were logged except if force was set.
         failed = force;
       } else {
