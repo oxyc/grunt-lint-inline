@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+@using Some.Library;
+
+@model MyModel
+@{ 
+  var config = IoC.ConfigurationManager();
+}
+<html>
+<body>
+  <head></head>
+
+  <script type="text/javascript">
+    (function() {
+      
+      var config = {}; 
+
+      config.id = @Model.Id;
+      config.model = @Model;
+      config.stuff = @Model.Stuff();
+      config.stuffString = "@Model.Stuff()";
+
+      config.wrappedModel = @(Model);
+      config.wrappedStuff = @(Model.Stuff());
+      config.wrappedStuffString = "@(Html(Model.Stuff()))";
+
+      config.curly1 = @{ Model };
+      config.curly2 = "@{ Model.Just().Do().It() }";
+      config.curly3 = @{ Html.render(Some.Action(arg1, arg2)) };
+      config.mixed("foo", { id : "@Model.Id", hasFoo : @Html.Json(Model.HasFoo) });
+      config.mixed2("bar", @Html.Json(Model.Bar) );
+
+    }());
+  </script>
+</body>
+</html>
