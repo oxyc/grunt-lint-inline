@@ -17,8 +17,7 @@ grunt.loadNpmTasks('grunt-lint-inline');
 
 ## Usage
 
-The task leverages [grunt-contrib-jshint][1] by wrapping around it and removing
-all code not within `<script>`-tags.
+The task leverages [grunt-contrib-jshint][1] by wrapping around it and removing all code not within `<script>`-tags.
 
 JSHint options will be read exactly the same as the JSHint task.
 
@@ -27,6 +26,30 @@ grunt.initConfig({
   inlinelint: {
     html: ['**/*.html'],
     php: ['**/*.php']
+  }
+});
+```
+
+### Additional Options
+
+#### regexpFilters
+
+Type: `Array`
+Default: `[]`
+
+Enable pattern replacement by sending in an array of RegExp-objects. Replacement are done per-line inside the script tags and matches are replaced with `null`.
+
+```javascript
+grunt.initConfig({
+  inlinelint: {
+	cshtml: {
+		src: ['**/*.html'],
+		options: {
+			regexpFilters: [
+				new RegExp(/([\"|\']?)@\w[\w\.\(\)]+/g) 
+			]
+		}
+	}
   }
 });
 ```
