@@ -85,5 +85,16 @@ exports.inlinelint = {
     test.equals(0, matchesInFilteredFile, 'Should find no matches in filtered file');
 
     test.done();
+  },
+  'test-6': function (test) {
+    test.expect(2);
+    var files = [path.join(fixtures, 'tag-types.html')];
+    var options = {};
+    var tempFiles         = lintinline.wrapReporter(jshint, {}, files);
+
+    jshint.lint(tempFiles, options, function (results, data) {
+      test.ok(results.length === 0, 'Should not include non-js script-tags');
+    });
+    test.done();
   }
 };
