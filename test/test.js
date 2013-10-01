@@ -13,7 +13,7 @@ var calculateMatches = function (file, regexFilters) {
     });
   });
   return count;
-}
+};
 
 exports.inlinelint = {
   'test-1': function (test) {
