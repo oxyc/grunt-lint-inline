@@ -13,7 +13,7 @@ var calculateMatches = function (file, regexFilters) {
     });
   });
   return count;
-}
+};
 
 exports.inlinelint = {
   'test-1': function (test) {
@@ -95,13 +95,37 @@ exports.inlinelint = {
     var replacement = '$1-$1-$1';
 
     var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, patterns, replacement);
-    
+
     console.log(grunt.file.read(filteredTempFiles[0]));
 
     var matches = calculateMatches(filteredTempFiles[0], [/foo-foo-foo/]);
 
     test.equals(1, matches, 'Should find provided replacement in processed file');
 
+    test.done();
+  },
+  'test-7 only lints non-js script-tags': function (test) {
+    test.expect(1);
+    var files     = [path.join(fixtures, 'tag-types.html')];
+    var options   = {};
+    var tempFiles = lintinline.wrapReporter(jshint, {}, files);
+
+    jshint.lint(tempFiles, options, function (results, data) {
+      test.ok(results.length === 0, 'Should not include non-js script-tags');
+    });
+    test.done();
+  },
+  'test-8 lints script tags with or without type': function (test) {
+    test.expect(3);
+    var files     = [path.join(fixtures, 'tag-types-fail.html')];
+    var options   = {};
+    var tempFiles = lintinline.wrapReporter(jshint, {}, files);
+
+    jshint.lint(tempFiles, options, function (results, data) {
+      test.equal(results[0].file, files[0], 'Should use real filepaths in `results`');
+      test.equal(results[0].error.code, 'W033', 'Should detect errors');
+      test.equal(results.length, 2, 'Should lint regular script tags with and without type');
+    });
     test.done();
   }
 };
