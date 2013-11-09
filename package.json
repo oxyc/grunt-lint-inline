@@ -1,7 +1,7 @@
 {
   "name": "grunt-lint-inline",
   "description": "Grunt task for linting inline javascript",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://github.com/oxyc/grunt-lint-inline",
   "bugs": {
     "url": "https://github.com/oxyc/grunt-lint-inline/issues"
