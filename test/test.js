@@ -66,23 +66,41 @@ exports.inlinelint = {
     });
     test.done();
   },
-  'test-5': function (test) {
+  'test-5 replaces patterns with supplied regexs': function (test) {
     test.expect(2);
     var files = [path.join(fixtures, 'razor.cshtml')];
-    var regexFilters = [
-      new RegExp(/([\"|\']?)@\w[\w\.\(\)]+/g),
-      new RegExp(/([\"|\']?)@\(([^(\)]*|\(([^(\)]*|\([^\)]*\))*\))*\)/g),
-      new RegExp(/([\"|\']?)@\{[^\}]*?\}/g)
+    var patterns = [
+      /([\"|\']?)@\w[\w\.\(\)]+/g,
+      /([\"|\']?)@\(([^(\)]*|\(([^(\)]*|\([^\)]*\))*\))*\)/g,
+      /([\"|\']?)@\{[^\}]*?\}/g
     ];
 
     var tempFiles         = lintinline.wrapReporter(jshint, {}, files);
-    var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, regexFilters);
+    var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, patterns, '$1null');
 
-    var matchesInUnfilteredFile = calculateMatches(tempFiles[0], regexFilters);
-    var matchesInFilteredFile   = calculateMatches(filteredTempFiles[0], regexFilters);
+    var matchesInUnfilteredFile = calculateMatches(tempFiles[0], patterns);
+    var matchesInFilteredFile   = calculateMatches(filteredTempFiles[0], patterns);
 
     test.ok(matchesInUnfilteredFile > 0, 'Should find matches in unfiltered file');
     test.equals(0, matchesInFilteredFile, 'Should find no matches in filtered file');
+
+    test.done();
+  },
+  'test-6 uses supplied replacement for patterns': function (test) {
+    test.expect(1);
+    var files = [path.join(fixtures, 'pass.html')];
+    var patterns = [
+      /(foo)/g
+    ];
+    var replacement = '$1-$1-$1';
+
+    var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, patterns, replacement);
+    
+    console.log(grunt.file.read(filteredTempFiles[0]));
+
+    var matches = calculateMatches(filteredTempFiles[0], [/foo-foo-foo/]);
+
+    test.equals(1, matches, 'Should find provided replacement in processed file');
 
     test.done();
   }

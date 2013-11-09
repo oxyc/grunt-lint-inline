@@ -5,7 +5,7 @@ var grunt = require('grunt')
   , Tempfile = require('temporary/lib/file')
   , jshintReporter = jshint.reporter;
 
-function removeHTML(src, regexFilters) {
+function removeHTML(src, patterns, replacement) {
   var lines = src.split('\n')
     , s = false;
 
@@ -18,21 +18,18 @@ function removeHTML(src, regexFilters) {
       }
     }
     if (!s) lines[i] = '';
-    else {
-      regexFilters.forEach(function(regex){
-        lines[i] = lines[i].replace(regex, '$1null');
-      });
-    }
   });
 
-  return lines.join('\n');
+  return patterns.reduce(function(content, regex){
+    return content.replace(regex, replacement);
+  }, lines.join('\n'));
 }
 
-function createTemporaryFiles(files, regexFilters) {
+function createTemporaryFiles(files, patterns, replacement) {
   var map = {};
   files.forEach(function (filepath, index) {
     var source = grunt.file.read(filepath);
-    source = removeHTML(source, regexFilters);
+    source = removeHTML(source, patterns, replacement);
     if (/^\s*$/.test(source)) return; // Skip files without JavaScript.
 
     var temporary = new Tempfile();
@@ -43,8 +40,8 @@ function createTemporaryFiles(files, regexFilters) {
   return map;
 }
 
-exports.wrapReporter = function wrapReporter(jshint, options, files, regexFilters) {
-  var mapTemporary = createTemporaryFiles(files, regexFilters || []);
+exports.wrapReporter = function wrapReporter(jshint, options, files, patterns, replacement) {
+  var mapTemporary = createTemporaryFiles(files, patterns || [], replacement);
   var tempFiles = Object.keys(mapTemporary);
 
   // Reattach original reporter so selectReporter defaults to it on multiple

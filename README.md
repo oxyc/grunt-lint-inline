@@ -32,12 +32,12 @@ grunt.initConfig({
 
 ### Additional Options
 
-#### regexpFilters
+#### patterns
 
 Type: `Array`
 Default: `[]`
 
-Enable pattern replacement by sending in an array of RegExp-objects. Replacement are done per-line inside the script tags and matches are replaced with `null`.
+Enable pattern replacement by sending in an array of RegExp-objects. Replacement are done inside the script tags and matches are replaced with provided replacement or defaults to an empty string.
 
 ```javascript
 grunt.initConfig({
@@ -45,9 +45,10 @@ grunt.initConfig({
 	cshtml: {
 		src: ['**/*.html'],
 		options: {
-			regexpFilters: [
-				new RegExp(/([\"|\']?)@\w[\w\.\(\)]+/g) 
-			]
+			patterns: [
+				/([\"|\']?)@\w[\w\.\(\)]+/g
+			],
+			replacement: ''
 		}
 	}
   }

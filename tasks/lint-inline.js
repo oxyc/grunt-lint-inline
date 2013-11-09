@@ -14,7 +14,8 @@ module.exports = function (grunt) {
     var options = this.options({
       force: false,
       reporterOutput: null,
-      regexpFilters: []
+      patterns: [],
+      replacement: ''
     });
 
     // Report JSHint errors but dont fail the task
@@ -25,9 +26,13 @@ module.exports = function (grunt) {
     var reporterOutput = options.reporterOutput;
     delete options.reporterOutput;
 
-    // Use regex to filter and replace patterns in code lines
-    var regexpFilters = options.regexpFilters;
-    delete options.regexpFilters;
+    // Use regex's to filter and replace patterns in code lines
+    var patterns = options.patterns;
+    delete options.patterns;
+
+    // Use supplied or default replacement for patterns
+    var replacement = options.replacement;
+    delete options.replacement;
 
     // Hook into stdout to capture report
     var output = '';
@@ -42,7 +47,7 @@ module.exports = function (grunt) {
 
     // Create temporary files for the inline javascript and wrap the reporter
     // to use the real file paths.
-    var tempFiles = lintinline.wrapReporter(jshint, options, this.filesSrc, regexpFilters);
+    var tempFiles = lintinline.wrapReporter(jshint, options, this.filesSrc, patterns, replacement);
 
     // Iterate over the temp files instead of this.filesSrc
     jshint.lint(tempFiles, options, function(results, data) {
