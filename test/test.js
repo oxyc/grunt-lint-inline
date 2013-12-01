@@ -9,7 +9,7 @@ var calculateMatches = function (file, regexFilters) {
   var count = 0;
   grunt.file.read(file).split('\n').forEach(function(line, i){
     regexFilters.forEach(function(filter){
-      if(filter.test(line)) count++;
+      if (filter.test(line)) count++;
     });
   });
   return count;
@@ -95,8 +95,6 @@ exports.inlinelint = {
     var replacement = '$1-$1-$1';
 
     var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, patterns, replacement);
-
-    console.log(grunt.file.read(filteredTempFiles[0]));
 
     var matches = calculateMatches(filteredTempFiles[0], [/foo-foo-foo/]);
 

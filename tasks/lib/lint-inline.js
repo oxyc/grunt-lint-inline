@@ -7,17 +7,23 @@ var grunt = require('grunt')
 
 function removeHTML(src, patterns, replacement) {
   var lines = src.split('\n')
-    , s = false;
+    , relevant = false;
 
   lines.forEach(function(line, i) {
-    if ((/<\/?script/i).test(line)) {
-      if (!((/<script/i).test(line) && (/<\/script/i).test(line))) {
-        // take only inline scripts
-        s = !s;
-        lines[i] = '';
-      }
+    var starts = (/<script/i).test(line)
+      , stops = (/<\/script/i).test(line);
+
+    if (starts && !(starts && stops)) {
+      var type = line.match(/<script[^>]*type=['"]?([^\s"']*)[^>]*>/i);
+      relevant = (type === null || type[1] === 'text/javascript');
+      lines[i] = '';
+    } else if (stops) {
+      relevant = false;
     }
-    if (!s) lines[i] = '';
+
+    if (!relevant) {
+      lines[i] = '';
+    }
   });
 
   return patterns.reduce(function(content, regex){
