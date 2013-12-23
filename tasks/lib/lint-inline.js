@@ -5,11 +5,11 @@ var grunt = require('grunt')
   , Tempfile = require('temporary/lib/file')
   , jshintReporter = jshint.reporter;
 
-function removeHTML(src, patterns, replacement) {
+function removeHTML(src, patterns) {
   var lines = src.split('\n')
     , relevant = false;
 
-  lines.forEach(function(line, i) {
+  lines.forEach(function (line, i) {
     var starts = (/<script/i).test(line)
       , stops = (/<\/script/i).test(line);
 
@@ -26,16 +26,16 @@ function removeHTML(src, patterns, replacement) {
     }
   });
 
-  return patterns.reduce(function(content, regex){
-    return content.replace(regex, replacement);
+  return patterns.reduce(function (content, pattern){
+    return content.replace(pattern.match, pattern.replacement || '');
   }, lines.join('\n'));
 }
 
-function createTemporaryFiles(files, patterns, replacement) {
+function createTemporaryFiles(files, patterns) {
   var map = {};
   files.forEach(function (filepath, index) {
     var source = grunt.file.read(filepath);
-    source = removeHTML(source, patterns, replacement);
+    source = removeHTML(source, patterns);
     if (/^\s*$/.test(source)) return; // Skip files without JavaScript.
 
     var temporary = new Tempfile();
@@ -46,8 +46,8 @@ function createTemporaryFiles(files, patterns, replacement) {
   return map;
 }
 
-exports.wrapReporter = function wrapReporter(jshint, options, files, patterns, replacement) {
-  var mapTemporary = createTemporaryFiles(files, patterns || [], replacement);
+exports.wrapReporter = function wrapReporter(jshint, options, files, patterns) {
+  var mapTemporary = createTemporaryFiles(files, patterns || []);
   var tempFiles = Object.keys(mapTemporary);
 
   // Reattach original reporter so selectReporter defaults to it on multiple
@@ -61,7 +61,7 @@ exports.wrapReporter = function wrapReporter(jshint, options, files, patterns, r
     delete options[reporter];
   });
 
-  jshint.reporter = function(results, data) {
+  jshint.reporter = function (results, data) {
     results.forEach(function (result, index) {
       var temp = result.file;
       // Change the filepath from the temporary file to the real file path.

@@ -5,18 +5,18 @@ var grunt = require('grunt')
   , fs = require('fs')
   , fixtures = path.join(__dirname, 'fixtures');
 
-var calculateMatches = function (file, regexFilters) {
+var calculateMatches = function(file, regexFilters) {
   var count = 0;
-  grunt.file.read(file).split('\n').forEach(function(line, i){
-    regexFilters.forEach(function(filter){
-      if (filter.test(line)) count++;
+  grunt.file.read(file).split('\n').forEach(function (line, i){
+    regexFilters.forEach(function (filter) {
+      if (filter.match.test(line)) count++;
     });
   });
   return count;
 };
 
 exports.inlinelint = {
-  'test-1': function (test) {
+  'test-1 detects errors in incorrect files': function (test) {
     test.expect(4);
     var files = [path.join(fixtures, 'fail.html')];
     var options = {};
@@ -30,7 +30,7 @@ exports.inlinelint = {
     });
     test.done();
   },
-  'test-2': function (test) {
+  'test-2 validates correct files': function (test) {
     test.expect(1);
     var files = [path.join(fixtures, 'pass.html')];
     var options = {};
@@ -41,7 +41,7 @@ exports.inlinelint = {
     });
     test.done();
   },
-  'test-3': function (test) {
+  'test-3 deletes temporary files after task finishes': function (test) {
     test.expect(1);
     var files = [path.join(fixtures, 'fail.html')];
     var options = {};
@@ -54,7 +54,7 @@ exports.inlinelint = {
       test.done();
     });
   },
-  'test-4': function (test) {
+  'test-4 reports line numbers in original file': function (test) {
     test.expect(1);
     var files = [path.join(fixtures, 'fail.html')];
     var expected = 9; // hard coded but what to do?
@@ -70,13 +70,13 @@ exports.inlinelint = {
     test.expect(2);
     var files = [path.join(fixtures, 'razor.cshtml')];
     var patterns = [
-      /([\"|\']?)@\w[\w\.\(\)]+/g,
-      /([\"|\']?)@\(([^(\)]*|\(([^(\)]*|\([^\)]*\))*\))*\)/g,
-      /([\"|\']?)@\{[^\}]*?\}/g
+      { match: /([\"|\']?)@\w[\w\.\(\)]+/g },
+      { match: /([\"|\']?)@\(([^(\)]*|\(([^(\)]*|\([^\)]*\))*\))*\)/g },
+      { match: /([\"|\']?)@\{[^\}]*?\}/g }
     ];
 
     var tempFiles         = lintinline.wrapReporter(jshint, {}, files);
-    var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, patterns, '$1null');
+    var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, patterns);
 
     var matchesInUnfilteredFile = calculateMatches(tempFiles[0], patterns);
     var matchesInFilteredFile   = calculateMatches(filteredTempFiles[0], patterns);
@@ -90,16 +90,13 @@ exports.inlinelint = {
     test.expect(1);
     var files = [path.join(fixtures, 'pass.html')];
     var patterns = [
-      /(foo)/g
+      { match: /(foo)/g, replacement: '$1-$1-$1' }
     ];
-    var replacement = '$1-$1-$1';
 
-    var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, patterns, replacement);
-
-    var matches = calculateMatches(filteredTempFiles[0], [/foo-foo-foo/]);
+    var filteredTempFiles = lintinline.wrapReporter(jshint, {}, files, patterns);
+    var matches = calculateMatches(filteredTempFiles[0], [{ match: /foo-foo-foo/ }]);
 
     test.equals(1, matches, 'Should find provided replacement in processed file');
-
     test.done();
   },
   'test-7 only lints non-js script-tags': function (test) {
