@@ -1,7 +1,7 @@
 {
   "name": "grunt-lint-inline",
   "description": "Grunt task for linting inline javascript",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "homepage": "https://github.com/oxyc/grunt-lint-inline",
   "bugs": {
     "url": "https://github.com/oxyc/grunt-lint-inline/issues"
@@ -11,7 +11,8 @@
     "url": "http://www.oxy.fi"
   },
   "contributors": [
-    "Tobias Lundin <tobias.lundin@gmail.com>"
+    "Tobias Lundin <tobias.lundin@gmail.com>",
+    "Daniel Hartmann"
   ],
   "main": "Gruntfile.js",
   "repository": {
