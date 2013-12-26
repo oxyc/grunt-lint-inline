@@ -46,9 +46,19 @@ function createTemporaryFiles(files, patterns, replacement) {
   return map;
 }
 
-exports.wrapReporter = function wrapReporter(jshint, options, files, patterns, replacement) {
+exports.wrapReporter = function wrapReporter(jshint, options, files, patterns, replacement, lintAllFile) {
   var mapTemporary = createTemporaryFiles(files, patterns || [], replacement);
   var tempFiles = Object.keys(mapTemporary);
+  var lintTargetFiles = tempFiles;
+
+  // Add all file to lint target list if lintAllFile option is enabled
+  if (lintAllFile) {
+    var hasTempFile = {};
+    tempFiles.forEach(function(temp) { hasTempFile[mapTemporary[temp].filepath] = true; });
+    files.forEach(function(file) {
+      if (!hasTempFile[file]) lintTargetFiles.push(file);
+    });
+  }
 
   // Reattach original reporter so selectReporter defaults to it on multiple
   // executions.
@@ -64,11 +74,13 @@ exports.wrapReporter = function wrapReporter(jshint, options, files, patterns, r
   jshint.reporter = function(results, data) {
     results.forEach(function (result, index) {
       var temp = result.file;
+      if (!(temp in mapTemporary)) return;
       // Change the filepath from the temporary file to the real file path.
       results[index].file = mapTemporary[temp].filepath;
     });
     data.forEach(function (item, index) {
       var temp = item.file;
+      if (!(temp in mapTemporary)) return;
       data[index].file = mapTemporary[temp].filepath;
     });
     // Clean up
@@ -79,5 +91,5 @@ exports.wrapReporter = function wrapReporter(jshint, options, files, patterns, r
     customReporter(results, data);
   };
 
-  return tempFiles;
+  return lintTargetFiles;
 };

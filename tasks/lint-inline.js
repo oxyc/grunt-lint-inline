@@ -34,6 +34,10 @@ module.exports = function (grunt) {
     var replacement = options.replacement;
     delete options.replacement;
 
+    // Flag to lint all file or not
+    var lintAllFile = options.lintAllFile;
+    delete options.lintAllFile;
+
     // Hook into stdout to capture report
     var output = '';
     if (reporterOutput) {
@@ -47,7 +51,7 @@ module.exports = function (grunt) {
 
     // Create temporary files for the inline javascript and wrap the reporter
     // to use the real file paths.
-    var tempFiles = lintinline.wrapReporter(jshint, options, this.filesSrc, patterns, replacement);
+    var tempFiles = lintinline.wrapReporter(jshint, options, this.filesSrc, patterns, replacement, lintAllFile);
 
     // Iterate over the temp files instead of this.filesSrc
     jshint.lint(tempFiles, options, function(results, data) {

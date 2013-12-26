@@ -125,5 +125,35 @@ exports.inlinelint = {
       test.equal(results.length, 2, 'Should lint regular script tags with and without type');
     });
     test.done();
+  },
+  'test-9 lints only files which has inline script': function (test) {
+    test.expect(2);
+    var files     = [path.join(fixtures, 'lint_target', 'fail.html'),
+                     path.join(fixtures, 'lint_target', 'fail.js')];
+    var options   = {};
+    var tempFiles = lintinline.wrapReporter(jshint, options, files, null, null, false);
+
+    jshint.lint(tempFiles, options, function (results, data) {
+      var is_html_file_targeted = results.some(function(result) { var re = /fail\.html/; return re.test(result.file); });
+      var is_js_file_targeted = results.some(function(result) { var re = /fail\.js/; return re.test(result.file); });
+      test.ok(is_html_file_targeted, 'Should target html file');
+      test.ok(!is_js_file_targeted, 'Should not target js file');
+    });
+    test.done();
+  },
+  'test-10 lints all file if lintAllFile flag is true': function (test) {
+    test.expect(2);
+    var files     = [path.join(fixtures, 'lint_target', 'fail.html'),
+                     path.join(fixtures, 'lint_target', 'fail.js')];
+    var options   = {lintAllFile: true};
+    var tempFiles = lintinline.wrapReporter(jshint, options, files, null, null, true);
+
+    jshint.lint(tempFiles, options, function (results, data) {
+      var is_html_file_targeted = results.some(function(result) { var re = /fail\.html/; return re.test(result.file); });
+      var is_js_file_targeted = results.some(function(result) { var re = /fail\.js/; return re.test(result.file); });
+      test.ok(is_html_file_targeted, 'Should target html file');
+      test.ok(is_js_file_targeted, 'Should target js file');
+    });
+    test.done();
   }
 };
