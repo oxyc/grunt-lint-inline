@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fixture</title>
+  </head>
+  <body>
+    <!-- 
+    <script>
+      (function() {
+        var baz = "bar" // should not raise an error
+      }(this));
+    </script>
+     -->
+    <script>
+      (function() {
+        var foo = "bar";
+      }(this));
+    </script>
+    <!-- 
+    <script>
+      (function() {
+        var baz = "bar" // should not raise an error
+      }(this));
+    </script>
+     -->
+  </body>
+</html>
