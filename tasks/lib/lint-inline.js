@@ -7,20 +7,36 @@ var grunt = require('grunt')
 
 function removeHTML(src, patterns) {
   var lines = src.split('\n')
-    , relevant = false;
+    , relevant = false
+    , commented = false;
 
   lines.forEach(function (line, i) {
-    var starts = (/<script/i).test(line)
-      , stops = (/<\/script/i).test(line);
+    var scriptStarts = (/<script/i).test(line)
+      , scriptStops = (/<\/script/i).test(line)
+      , commentStarts = (/<!--/).test(line)
+      , commentStops = (/-->/).test(line);
 
-    if (starts && !(starts && stops)) {
-      var type = line.match(/<script[^>]*type=['"]?([^\s"']*)[^>]*>/i);
-      relevant = (type === null || type[1] === 'text/javascript');
-      lines[i] = '';
-    } else if (stops) {
-      relevant = false;
+    // if we're not already in a valid (relevant) script
+    if (!relevant) {
+      if (commentStarts && !(commentStarts && commentStops)) {
+        commented = true;
+        relevant = false;
+      } else if (commentStops) {
+        commented = false;
+      }
     }
 
+    // if we're not already in a comment section
+    if (!commented) {
+      if (scriptStarts && !(scriptStarts && scriptStops)) {
+        var type = line.match(/<script[^>]*type=['"]?([^\s"']*)[^>]*>/i);
+        relevant = (type === null || type[1] === 'text/javascript');
+        lines[i] = '';
+      } else if (scriptStops) {
+        relevant = false;
+      }
+    }
+    
     if (!relevant) {
       lines[i] = '';
     }
