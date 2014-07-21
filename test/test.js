@@ -122,5 +122,27 @@ exports.inlinelint = {
       test.equal(results.length, 2, 'Should lint regular script tags with and without type');
     });
     test.done();
+  },
+  'test-9 don t lint commented script-tags': function (test) {
+    test.expect(1);
+    var files     = [path.join(fixtures, 'commented-scripts.html')];
+    var options   = {};
+    var tempFiles = lintinline.wrapReporter(jshint, {}, files);
+
+    jshint.lint(tempFiles, options, function (results, data) {
+      test.ok(results.length === 0, 'Should not include a commented script-tag');
+    });
+    test.done();
+  },
+  'test-10 ignore html comments inside a script': function (test) {
+    test.expect(1);
+    var files     = [path.join(fixtures, 'fake-comment-in-scripts-fail.html')];
+    var options   = {};
+    var tempFiles = lintinline.wrapReporter(jshint, {}, files);
+
+    jshint.lint(tempFiles, options, function (results, data) {
+      test.ok(results.length === 1, "Should not interpret html comments if they're inside a valid script ");
+    });
+    test.done();
   }
 };

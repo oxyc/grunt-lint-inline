@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fixture</title>
+  </head>
+  <body>
+    <!-- 
+    <script>
+      (function() {
+        var baz = "bar"; 
+      }(this));
+    </script>
+     -->
+     <!-- should be abble to lint that -->
+    <script>
+      (function() {
+        var foo = "bar"
+      }(this));
+    </script>
+
+  </body>
+</html>

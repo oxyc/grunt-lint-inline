@@ -7,22 +7,33 @@ var grunt = require('grunt')
 
 function removeHTML(src, patterns) {
   var lines = src.split('\n')
-    , relevant = false;
+    , scriptSection = false
+    , commentingSection = false;
 
   lines.forEach(function (line, i) {
     var starts = (/<script/i).test(line)
-      , stops = (/<\/script/i).test(line);
+      , stops = (/<\/script/i).test(line)
+      , commentStart = (/<!--/).test(line)
+      , commentStop = (/-->/).test(line);
 
     if (starts && !(starts && stops)) {
       var type = line.match(/<script[^>]*type=['"]?([^\s"']*)[^>]*>/i);
-      relevant = (type === null || type[1] === 'text/javascript');
+      scriptSection = (type === null || type[1] === 'text/javascript');
       lines[i] = '';
     } else if (stops) {
-      relevant = false;
+      scriptSection = false;
     }
 
-    if (!relevant) {
+    if(!scriptSection && commentStart){
+      commentingSection = true;
+    }
+
+    if (!scriptSection || commentingSection) {
       lines[i] = '';
+    }
+
+    if(commentStop){
+      commentingSection = false;
     }
   });
 
