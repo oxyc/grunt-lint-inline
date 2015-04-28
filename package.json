@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "grunt-contrib-jshint": "~0.10.0",
-    "temporary": "0.0.5"
+    "temporary": "0.0.8"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
