@@ -29,19 +29,22 @@ grunt.loadNpmTasks('grunt-lint-inline');
 The task leverages [grunt-contrib-jshint][1] by wrapping around it and removing
 all code not within `<script>`-tags.
 
-JSHint options will be read exactly the same as the JSHint task with a few
-additions.
+All options defined in the task will be passed on to JSHint with the exception of those defined under [Additional Options](#options).
 
 ```js
 grunt.initConfig({
   inlinelint: {
+    options: { /* options here */ }
     html: ['**/*.html'],
-    php: ['**/*.php']
+    php: {
+      src: ['**/*.php'],
+      options: { /* php-task-specific options here */ }
+    }
   }
 });
 ```
 
-### Additional Options
+### Additional Options<a name="options"></a>
 
 #### patterns
 
@@ -49,7 +52,7 @@ Type: `Array`
 Default: `[]`
 
 Enable pattern replacement by sending in an array of objects containing a
-`match` property and a `replacement` (optional) property.
+`match` property and an (optional) `replacement` property.
 
 Replacements are done inside the script tags and matches are replaced with
 provided replacement or defaults to an empty string.
@@ -81,6 +84,7 @@ Indicates the matching expression.
 #### patterns.replacement
 
 Type: `String|Function`
+Default: `''`
 
 Indicates the replacement for match, for more information about replacement
 have a look at [String.replace][2].
