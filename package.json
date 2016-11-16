@@ -1,7 +1,7 @@
 {
   "name": "grunt-lint-inline",
   "description": "Grunt task for linting inline javascript",
-  "version": "0.4.5",
+  "version": "1.0.0",
   "homepage": "https://github.com/oxyc/grunt-lint-inline",
   "bugs": {
     "url": "https://github.com/oxyc/grunt-lint-inline/issues"
@@ -23,13 +23,13 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-jshint": "~1.0.0",
     "temporary": "0.0.8"
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt-contrib-watch": "~0.5.3"
+    "grunt": "^1.0.1",
+    "grunt-contrib-nodeunit": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0"
   },
   "peerDependencies": {
     "grunt": ">=0.4.0"
